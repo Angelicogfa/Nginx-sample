@@ -1,0 +1,37 @@
+version: '3.3'
+
+networks: 
+  contagem-network:
+    driver: bridge
+  produto-network:
+    driver: bridge
+
+services:
+  proxy:
+    image: proxy-contagem
+    build: 
+      context: proxy
+    depends_on: 
+      - apicontagem
+      - apiproduto
+    networks: 
+      - contagem-network
+      - produto-network
+    ports: 
+      - "4000:80"
+  
+  apicontagem:
+    image: api-contagem
+    build: 
+      context: apis/Contador
+    networks: 
+      - contagem-network
+
+  apiproduto:
+    image: api-produto
+    build:
+      context: apis/Produtos
+    networks: 
+      - produto-network
+
+    
